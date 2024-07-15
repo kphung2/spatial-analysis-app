@@ -35,23 +35,6 @@ map.on('load', () => {
   const distance = turf.distance(from, to, { units: 'miles' });
   console.log(`Distance: ${distance} miles`);
 
-  // Nearest neighbor analysis
-  const nearest = turf.nearestPoint(from, points);
-  console.log(`Nearest point to ${from.properties.name}: ${nearest.properties.name}`);
-
-  // Buffering
-  const buffered = turf.buffer(from, 0.5, { units: 'miles' });
-  map.addSource('buffered', { type: 'geojson', data: buffered });
-  map.addLayer({
-    id: 'buffered',
-    type: 'fill',
-    source: 'buffered',
-    paint: {
-      'fill-color': '#B4D455',
-      'fill-opacity': 0.5
-    }
-  });
-
   // Draw a line between the points
   const line = turf.lineString([from.geometry.coordinates, to.geometry.coordinates]);
   map.addSource('line', { type: 'geojson', data: line });
@@ -83,8 +66,29 @@ map.on('load', () => {
     layout: {
       'text-field': ['get', 'title'],
       'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
-      'text-size': 12,
-      'text-offset': [0, 1.5]
+      'text-size': 14,
+      'text-offset': [0, 1.5],
+      'text-anchor': 'top'
+    },
+    paint: {
+      'text-color': '#000'
+    }
+  });
+
+  // Nearest neighbor analysis
+  const nearest = turf.nearestPoint(from, points);
+  console.log(`Nearest point to ${from.properties.name}: ${nearest.properties.name}`);
+
+  // Buffering
+  const buffered = turf.buffer(from, 0.5, { units: 'miles' });
+  map.addSource('buffered', { type: 'geojson', data: buffered });
+  map.addLayer({
+    id: 'buffered',
+    type: 'fill',
+    source: 'buffered',
+    paint: {
+      'fill-color': '#B4D455',
+      'fill-opacity': 0.5
     }
   });
 });
