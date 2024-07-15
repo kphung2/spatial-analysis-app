@@ -51,4 +51,40 @@ map.on('load', () => {
       'fill-opacity': 0.5
     }
   });
+
+  // Draw a line between the points
+  const line = turf.lineString([from.geometry.coordinates, to.geometry.coordinates]);
+  map.addSource('line', { type: 'geojson', data: line });
+  map.addLayer({
+    id: 'line',
+    type: 'line',
+    source: 'line',
+    layout: {},
+    paint: {
+      'line-color': '#888',
+      'line-width': 2
+    }
+  });
+
+  // Add a label for the distance
+  const midpoint = turf.midpoint(from, to);
+  const label = {
+    type: 'Feature',
+    geometry: midpoint.geometry,
+    properties: {
+      title: `${distance.toFixed(2)} miles`
+    }
+  };
+  map.addSource('label', { type: 'geojson', data: label });
+  map.addLayer({
+    id: 'label',
+    type: 'symbol',
+    source: 'label',
+    layout: {
+      'text-field': ['get', 'title'],
+      'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+      'text-size': 12,
+      'text-offset': [0, 1.5]
+    }
+  });
 });
