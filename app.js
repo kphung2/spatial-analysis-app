@@ -37,6 +37,7 @@ map.on('load', () => {
 
   // Draw a line between the points
   const line = turf.lineString([from.geometry.coordinates, to.geometry.coordinates]);
+  console.log('Line coordinates:', line.geometry.coordinates);
   map.addSource('line', { type: 'geojson', data: line });
   map.addLayer({
     id: 'line',
@@ -51,6 +52,7 @@ map.on('load', () => {
 
   // Add a label for the distance
   const midpoint = turf.midpoint(from, to);
+  console.log('Midpoint coordinates:', midpoint.geometry.coordinates);
   const label = {
     type: 'Feature',
     geometry: midpoint.geometry,
@@ -81,6 +83,7 @@ map.on('load', () => {
 
   // Buffering
   const buffered = turf.buffer(from, 0.5, { units: 'miles' });
+  console.log('Buffered area:', buffered);
   map.addSource('buffered', { type: 'geojson', data: buffered });
   map.addLayer({
     id: 'buffered',
